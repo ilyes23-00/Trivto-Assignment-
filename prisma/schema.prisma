@@ -1,0 +1,18 @@
+/// Prisma schema for the assignment data layer.
+/// This file exists to define the SQLite-backed Like model and generate the Prisma client contract.
+/// It is used by Prisma CLI, src/lib/prisma.ts, and future server services under src/services/server.
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Like {
+  imageId   String   @id
+  liked     Boolean
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
