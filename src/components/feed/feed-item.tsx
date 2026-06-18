@@ -181,9 +181,9 @@ function FeedItemComponent({
           </div>
         </div>
       ) : null}
-      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent px-4 pb-8 pt-20 text-white">
+      <div className="absolute inset-x-0 bottom-4 bg-gradient-to-t from-black/85 via-black/40 to-transparent px-4 pb-[calc(4.5rem+env(safe-area-inset-bottom))] pt-14 text-white">
         <div className="flex items-end justify-between gap-4">
-          <div>
+          <div className="max-w-[min(18rem,calc(100vw-7rem))]">
             <p className="text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-white/60">
               Featured Image
             </p>
@@ -193,7 +193,7 @@ function FeedItemComponent({
             </p>
           </div>
 
-          <div className="flex flex-col items-center gap-2">
+          <div className="flex flex-col items-center gap-2 pb-2">
             <LikeButton
               liked={liked}
               disabled={isLikePending || !onToggleLike}
