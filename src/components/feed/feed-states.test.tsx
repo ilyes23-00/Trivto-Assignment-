@@ -8,7 +8,8 @@ import { createElement } from "react";
 import { describe, expect, it } from "vitest";
 import { FeedEmptyState } from "./feed-empty-state";
 import { FeedErrorState } from "./feed-error-state";
-import { FeedSkeleton } from "./feed-skeleton";
+import { FeedInlineState } from "./feed-inline-state";
+import { FeedLoadingState, FeedSkeleton } from "./feed-skeleton";
 
 describe("feed state components", () => {
   it("renders the skeleton layout", () => {
@@ -16,6 +17,12 @@ describe("feed state components", () => {
 
     expect(markup).toContain("animate-pulse");
     expect(markup).toContain("min-h-dvh");
+  });
+
+  it("renders the first-load state message", () => {
+    const markup = renderToStaticMarkup(createElement(FeedLoadingState));
+
+    expect(markup).toContain("Preparing the image stream");
   });
 
   it("renders the empty state message", () => {
@@ -26,9 +33,26 @@ describe("feed state components", () => {
 
   it("renders the error state message", () => {
     const markup = renderToStaticMarkup(
-      createElement(FeedErrorState, { message: "Unable to load feed." }),
+      createElement(FeedErrorState, {
+        kind: "network",
+        message: "Network connection lost while loading the feed.",
+      }),
     );
 
-    expect(markup).toContain("Unable to load feed.");
+    expect(markup).toContain("Connection lost while loading the feed");
+  });
+
+  it("renders the inline rate-limit state", () => {
+    const markup = renderToStaticMarkup(
+      createElement(FeedInlineState, {
+        kind: "rate_limit",
+        message: "The image service asked us to slow down.",
+        actionLabel: "Try Again Soon",
+        onAction: () => undefined,
+      }),
+    );
+
+    expect(markup).toContain("Try Again Soon");
+    expect(markup).toContain("slow down");
   });
 });

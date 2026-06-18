@@ -42,8 +42,13 @@ export function createLikeRepository(
     async getLikedImageIds(): Promise<readonly string[]> {
       // This query loads only liked rows so higher layers can bootstrap like state after refresh.
       // It exists to keep database filtering inside the repository instead of duplicating it elsewhere.
-      const records = await delegate.findMany(buildFindLikedImageIdsQuery());
-      return mapLikeRecordsToImageIds(records);
+      try {
+        const records = await delegate.findMany(buildFindLikedImageIdsQuery());
+        return mapLikeRecordsToImageIds(records);
+      } catch (error) {
+        console.error("Failed in likes repository:getLikedImageIds", error);
+        throw error;
+      }
     },
 
     /**
@@ -52,7 +57,12 @@ export function createLikeRepository(
     async saveLike(payload: UpdateLikeRequest): Promise<LikeRecord> {
       // This query upserts by imageId so the application can persist like toggles with one write path.
       // It exists to make repeated writes deterministic and avoid separate read-before-write logic.
-      return delegate.upsert(buildUpsertLikeQuery(payload));
+      try {
+        return await delegate.upsert(buildUpsertLikeQuery(payload));
+      } catch (error) {
+        console.error("Failed in likes repository:saveLike", error, payload);
+        throw error;
+      }
     },
   };
 }

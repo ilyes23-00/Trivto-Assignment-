@@ -1,6 +1,6 @@
 # Project Structure
 
-This document explains the folder layout for the take-home assignment scaffold. It describes structure only, not feature implementation.
+This document explains the current folder layout for the take-home assignment implementation. It focuses on where responsibilities live in the working codebase.
 
 ## Tree View
 
@@ -18,12 +18,22 @@ Trivto/
 │       │   └── 2026-06-17-tiktok-style-image-feed-implementation-plan.md
 │       └── specs/
 │           └── 2026-06-17-tiktok-style-image-feed-design.md
+├── AI_WORKFLOW.md
+├── API_DOCUMENTATION.md
+├── DATABASE.md
+├── INTERVIEW_NOTES.md
+├── LIKE_SYSTEM.md
+├── PERFORMANCE.md
+├── STATES.md
+├── DOUBLE_TAP.md
+├── INFINITE_SCROLL.md
 ├── next-env.d.ts
 ├── next.config.ts
 ├── package-lock.json
 ├── package.json
 ├── postcss.config.mjs
 ├── prisma/
+│   ├── migrations/
 │   └── schema.prisma
 ├── public/
 ├── rules.md
@@ -34,36 +44,50 @@ Trivto/
 │   │   │   │   └── route.ts
 │   │   │   └── likes/
 │   │   │       └── route.ts
+│   │   ├── error.tsx
 │   │   ├── favicon.ico
 │   │   ├── globals.css
 │   │   ├── layout.tsx
+│   │   ├── loading.tsx
 │   │   └── page.tsx
 │   ├── components/
 │   │   └── feed/
 │   │       ├── feed-empty-state.tsx
 │   │       ├── feed-error-state.tsx
+│   │       ├── feed-inline-state.tsx
 │   │       ├── feed-item.tsx
 │   │       ├── feed-skeleton.tsx
+│   │       ├── feed-state-frame.tsx
 │   │       ├── image-feed.tsx
+│   │       ├── image-load-failure-state.tsx
 │   │       └── like-button.tsx
+│   ├── database/
+│   │   ├── helpers/
+│   │   └── repositories/
 │   ├── hooks/
+│   │   ├── use-image-preload.ts
 │   │   ├── use-infinite-feed.ts
-│   │   └── use-like-image.ts
+│   │   └── use-likes.ts
 │   ├── lib/
 │   │   ├── constants.ts
 │   │   ├── prisma.ts
 │   │   └── utils.ts
+│   ├── mappers/
+│   │   └── picsum-feed-mapper.ts
 │   ├── services/
 │   │   ├── api/
 │   │   │   ├── feed-client.ts
 │   │   │   └── likes-client.ts
 │   │   └── server/
+│   │       ├── feed-route-service.ts
+│   │       ├── likes-route-service.ts
 │   │       ├── likes-service.ts
 │   │       └── picsum-service.ts
 │   └── types/
 │       ├── api.ts
 │       ├── feed.ts
-│       └── like.ts
+│       ├── like.ts
+│       └── picsum.ts
 └── tsconfig.json
 ```
 
@@ -91,7 +115,7 @@ This folder owns schema definitions for the database layer. Prisma CLI reads thi
 
 ### `public/`
 
-This folder is reserved for static assets that can be served directly by Next.js. It is currently empty because the assignment structure is being set up before asset decisions are made.
+This folder contains static assets served directly by Next.js. In this project it mainly holds framework placeholder assets rather than feed-specific product assets.
 
 ### `src/`
 
@@ -107,11 +131,11 @@ This folder holds backend HTTP route handlers owned by the Next.js application. 
 
 ### `src/app/api/feed/`
 
-This folder is reserved for the feed endpoint. It will later expose paginated image data through the backend proxy layer.
+This folder exposes the paginated backend-owned feed endpoint.
 
 ### `src/app/api/likes/`
 
-This folder is reserved for like read and write endpoints. It will later coordinate persistent like state through Prisma.
+This folder exposes backend endpoints for reading and persisting likes.
 
 ### `src/components/`
 
@@ -119,7 +143,11 @@ This folder contains UI building blocks. It separates presentational concerns fr
 
 ### `src/components/feed/`
 
-This feature folder groups all feed-specific visual pieces together. Keeping these components side-by-side makes the vertical feed easier to reason about and easier to explain in an interview.
+This feature folder groups the feed cards, like UI, reusable state components, and image failure fallback in one place.
+
+### `src/database/`
+
+This folder contains the database-facing helper and repository layers. It keeps Prisma query details out of route handlers and UI code.
 
 ### `src/hooks/`
 
@@ -135,11 +163,11 @@ This folder contains non-UI application logic. It separates data-fetching and ba
 
 ### `src/services/api/`
 
-This folder is reserved for frontend-facing fetch helpers that talk only to internal API routes. It prevents components from scattering raw fetch logic across the UI layer.
+This folder contains frontend-facing fetch helpers that talk only to internal API routes. It also centralizes request error parsing and in-flight request sharing.
 
 ### `src/services/server/`
 
-This folder is reserved for backend-only logic. It will later contain the Picsum proxy logic and Prisma-based like persistence logic.
+This folder contains backend-only logic including route-facing service wrappers, Picsum proxy behavior, and like persistence orchestration.
 
 ### `src/types/`
 
@@ -147,6 +175,6 @@ This folder centralizes shared TypeScript contracts. It helps keep API routes, s
 
 ## Notes
 
-- The scaffold intentionally avoids feature implementation.
-- Placeholder files exist so the final architecture is visible from the start.
+- The project is organized around clean boundaries rather than a strict monolith by file type only.
+- The `docs/superpowers/` files are historical planning artifacts and are not the source of truth for the final implementation.
 - The structure is designed for readability, maintainability, and interview explainability.

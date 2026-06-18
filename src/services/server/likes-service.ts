@@ -40,8 +40,13 @@ export function createLikesService(
      * Loads the liked image ids through the repository layer.
      */
     async getLikes(): Promise<LikesResponse> {
-      const likedImageIds = await repository.getLikedImageIds();
-      return { likedImageIds };
+      try {
+        const likedImageIds = await repository.getLikedImageIds();
+        return { likedImageIds };
+      } catch (error) {
+        console.error("Failed in likes service:getLikes", error);
+        throw error;
+      }
     },
 
     /**
@@ -50,13 +55,18 @@ export function createLikesService(
     async updateLike(
       payload: UpdateLikeRequest,
     ): Promise<UpdateLikeResponse> {
-      const likeRecord = await repository.saveLike(payload);
+      try {
+        const likeRecord = await repository.saveLike(payload);
 
-      return {
-        success: true,
-        imageId: likeRecord.imageId,
-        liked: likeRecord.liked,
-      };
+        return {
+          success: true,
+          imageId: likeRecord.imageId,
+          liked: likeRecord.liked,
+        };
+      } catch (error) {
+        console.error("Failed in likes service:updateLike", error, payload);
+        throw error;
+      }
     },
   };
 }

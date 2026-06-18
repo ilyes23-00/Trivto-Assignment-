@@ -20,6 +20,7 @@ describe("FeedItem", () => {
           url: "https://picsum.photos/id/7/4728/3168",
           downloadUrl: "https://picsum.photos/id/7/4728/3168",
         },
+        liked: true,
       }),
     );
 
@@ -29,5 +30,8 @@ describe("FeedItem", () => {
     );
     expect(markup).toContain("snap-start");
     expect(markup).toContain("min-h-dvh");
+    expect(markup).toContain("Unlike image");
+    expect(markup).toContain("Liked");
+    expect(markup).toContain("Double tap the image area to like");
   });
 });

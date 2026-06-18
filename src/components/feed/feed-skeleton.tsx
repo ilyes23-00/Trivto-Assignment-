@@ -1,3 +1,5 @@
+import { FeedStateFrame } from "./feed-state-frame";
+
 /**
  * Feed loading skeleton component.
  * This file exists to represent the full-screen feed layout before image data is available.
@@ -17,5 +19,22 @@ export function FeedSkeleton() {
         <div className="h-4 w-56 rounded-full bg-white/10" />
       </div>
     </div>
+  );
+}
+
+/**
+ * Renders the first-load state before feed data is ready.
+ */
+export function FeedLoadingState() {
+  return (
+    <FeedStateFrame
+      eyebrow="Loading Feed"
+      title="Preparing the image stream."
+      description="We are fetching the first screen of images and setting up the vertical feed."
+    >
+      <div className="pt-2">
+        <div className="mx-auto h-2 w-28 rounded-full bg-white/10" />
+      </div>
+    </FeedStateFrame>
   );
 }

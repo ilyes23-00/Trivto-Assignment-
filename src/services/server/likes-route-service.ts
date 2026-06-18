@@ -83,7 +83,7 @@ export function createLikesRouteHandlers(service: LikesRouteService): {
         const likesResponse: LikesResponse = await service.getLikes();
         return NextResponse.json(likesResponse, { status: 200 });
       } catch (error) {
-        console.error("Likes GET API error", error);
+        console.error("Failed in GET /api/likes", error);
         return buildErrorResponse(500, "INTERNAL_SERVER_ERROR", "Unable to load likes.");
       }
     },
@@ -104,7 +104,7 @@ export function createLikesRouteHandlers(service: LikesRouteService): {
         );
         return NextResponse.json(updateResponse, { status: 200 });
       } catch (error) {
-        console.error("Likes POST API error", error);
+        console.error("Failed in POST /api/likes", error, payloadOrResponse);
         return buildErrorResponse(500, "INTERNAL_SERVER_ERROR", "Unable to update like.");
       }
     },

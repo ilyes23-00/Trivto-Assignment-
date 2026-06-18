@@ -10,7 +10,9 @@ import { ImageFeed } from "./image-feed";
 
 describe("ImageFeed", () => {
   it("renders the empty state when no images are available", () => {
-    const markup = renderToStaticMarkup(createElement(ImageFeed, { images: [] }));
+    const markup = renderToStaticMarkup(
+      createElement(ImageFeed, { initialImages: [] }),
+    );
 
     expect(markup).toContain("No images available");
   });
@@ -18,7 +20,7 @@ describe("ImageFeed", () => {
   it("renders a snap-scrolling list when images are present", () => {
     const markup = renderToStaticMarkup(
       createElement(ImageFeed, {
-        images: [
+        initialImages: [
           {
             id: "1",
             author: "Author One",
@@ -36,6 +38,8 @@ describe("ImageFeed", () => {
             downloadUrl: "https://picsum.photos/id/2/100/100",
           },
         ],
+        initialLikedImageIds: ["1"],
+        initialHasMore: true,
       }),
     );
 
@@ -43,5 +47,7 @@ describe("ImageFeed", () => {
     expect(markup).toContain("snap-mandatory");
     expect(markup).toContain("Author One");
     expect(markup).toContain("Author Two");
+    expect(markup).toContain("aria-hidden");
+    expect(markup).toContain("Unlike image");
   });
 });

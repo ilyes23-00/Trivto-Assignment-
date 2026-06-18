@@ -1,0 +1,7 @@
+-- CreateTable
+CREATE TABLE "Like" (
+    "imageId" TEXT NOT NULL PRIMARY KEY,
+    "liked" BOOLEAN NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL
+);
